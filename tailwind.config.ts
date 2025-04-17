@@ -52,6 +52,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				neural: {
+					primary: '#9b87f5',
+					secondary: '#7E69AB',
+					accent: '#1EAEDB',
+					dark: '#1A1F2C',
+					light: '#F1F0FB',
+					red: '#ea384c'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
