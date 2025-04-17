@@ -170,7 +170,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
               className="border-neural-primary text-neural-primary hover:bg-neural-light"
             >
               <Check className="h-4 w-4 mr-2" />
-              Reset All Parameters
+              Auto Hyperparameter
             </Button>
           </div>
         </div>
