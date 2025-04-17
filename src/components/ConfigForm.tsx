@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { TrainingConfig } from '@/types';
-import { Sliders, Heart } from 'lucide-react';
+import { Sliders, RotateCcw, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ConfigFormProps {
@@ -15,6 +14,15 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
     const { name, value, type } = e.target;
     const parsedValue = type === 'number' ? parseFloat(value) : value;
     onChange({ [name]: parsedValue });
+  };
+
+  const resetParameters = () => {
+    onChange({
+      batchSize: 0,
+      learningRate: 0,
+      epochs: 0,
+      validationSplit: 0
+    });
   };
 
   const autoHyperparameters = () => {
