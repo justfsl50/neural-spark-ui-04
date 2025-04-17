@@ -1,3 +1,4 @@
+
 // Type definitions for our app
 
 export type AIModel = 'Llama2' | 'BERT' | 'GPT-2' | 'Stable Diffusion' | 'Whisper' | 'RoBERTa';

@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useReducer } from 'react';
-import { AIModel, Dataset, GPU, TrainingConfig, TrainingResults, TrainingState } from '@/types';
+import { AIModel, Dataset, TrainingConfig, TrainingResults, TrainingState } from '@/types';
 
 // Initial state
 const initialState: TrainingState = {
@@ -13,7 +13,6 @@ const initialState: TrainingState = {
     epochs: 10,
     validationSplit: 0.2,
   },
-  selectedGPU: null,
   trainingStatus: 'idle',
   trainingResults: null,
 };
@@ -24,7 +23,6 @@ type Action =
   | { type: 'SET_DATASET', payload: Dataset }
   | { type: 'SET_UPLOADED_FILE', payload: File }
   | { type: 'UPDATE_CONFIG', payload: Partial<TrainingConfig> }
-  | { type: 'SET_GPU', payload: GPU }
   | { type: 'SET_TRAINING_STATUS', payload: 'idle' | 'training' | 'complete' | 'error' }
   | { type: 'SET_TRAINING_RESULTS', payload: TrainingResults }
   | { type: 'RESET' };
@@ -40,8 +38,6 @@ const trainingReducer = (state: TrainingState, action: Action): TrainingState =>
       return { ...state, uploadedFile: action.payload };
     case 'UPDATE_CONFIG':
       return { ...state, config: { ...state.config, ...action.payload } };
-    case 'SET_GPU':
-      return { ...state, selectedGPU: action.payload };
     case 'SET_TRAINING_STATUS':
       return { ...state, trainingStatus: action.payload };
     case 'SET_TRAINING_RESULTS':

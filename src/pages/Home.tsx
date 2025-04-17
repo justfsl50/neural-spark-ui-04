@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TrainingProvider, useTraining } from '@/context/TrainingContext';
 import Stepper from '@/components/Stepper';
