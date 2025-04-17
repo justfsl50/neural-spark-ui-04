@@ -1,20 +1,17 @@
-
 import React, { useState } from 'react';
 import { TrainingProvider, useTraining } from '@/context/TrainingContext';
 import Stepper from '@/components/Stepper';
 import ModelSelection from '@/components/ModelSelection';
 import DatasetSelection from '@/components/DatasetSelection';
 import ConfigForm from '@/components/ConfigForm';
-import GPUSelection from '@/components/GPUSelection';
 import StartTraining from '@/components/StartTraining';
 import OutputScreen from '@/components/OutputScreen';
-import { AIModel, Dataset, GPU } from '@/types';
+import { AIModel, Dataset } from '@/types';
 
 const steps = [
   'Select Model',
   'Choose Dataset',
   'Configure Training',
-  'Select GPU',
   'Start Training',
   'View Results',
 ];
@@ -44,11 +41,6 @@ const HomeContent: React.FC = () => {
     dispatch({ type: 'UPDATE_CONFIG', payload: config });
   };
 
-  const handleSelectGPU = (gpu: GPU) => {
-    dispatch({ type: 'SET_GPU', payload: gpu });
-    goToNextStep();
-  };
-
   const handleTrainingComplete = () => {
     goToNextStep();
   };
@@ -62,7 +54,6 @@ const HomeContent: React.FC = () => {
   };
 
   const handleStepClick = (stepIndex: number) => {
-    // Only allow clicking on steps that we've already visited or the next step
     if (stepIndex <= currentStep + 1 && stepIndex <= getMaxAllowedStep()) {
       setCurrentStep(stepIndex);
     }
@@ -71,9 +62,8 @@ const HomeContent: React.FC = () => {
   const getMaxAllowedStep = () => {
     if (!state.selectedModel) return 0;
     if (!state.selectedDataset && !state.uploadedFile) return 1;
-    if (!state.selectedGPU) return 3;
-    if (state.trainingStatus !== 'complete') return 4;
-    return 5;
+    if (state.trainingStatus !== 'complete') return 3;
+    return 4;
   };
 
   const renderStepContent = () => {
@@ -98,10 +88,8 @@ const HomeContent: React.FC = () => {
           />
         );
       case 3:
-        return <GPUSelection onSelect={handleSelectGPU} selectedGPU={state.selectedGPU} />;
-      case 4:
         return <StartTraining onTrainingComplete={handleTrainingComplete} />;
-      case 5:
+      case 4:
         return <OutputScreen />;
       default:
         return null;
@@ -122,7 +110,7 @@ const HomeContent: React.FC = () => {
 
         <div className="mt-8">{renderStepContent()}</div>
 
-        {currentStep > 0 && currentStep < 5 && (
+        {currentStep > 0 && currentStep < 4 && (
           <div className="mt-8 flex justify-between">
             <button
               onClick={goToPreviousStep}
@@ -133,13 +121,13 @@ const HomeContent: React.FC = () => {
             <button
               onClick={goToNextStep}
               className={`py-2 px-4 rounded-lg text-white ${
-                currentStep === 4
+                currentStep === 3
                   ? 'bg-gray-300 cursor-not-allowed'
                   : 'bg-neural-primary hover:bg-neural-secondary'
               }`}
-              disabled={currentStep === 4}
+              disabled={currentStep === 3}
             >
-              {currentStep === 4 ? 'Training in Progress' : 'Next Step'}
+              {currentStep === 3 ? 'Training in Progress' : 'Next Step'}
             </button>
           </div>
         )}
