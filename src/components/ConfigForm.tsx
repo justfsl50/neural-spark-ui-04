@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TrainingConfig } from '@/types';
-import { Sliders, RotateCcw } from 'lucide-react';
+import { Sliders, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ConfigFormProps {
@@ -17,12 +17,12 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
     onChange({ [name]: parsedValue });
   };
 
-  const resetParameters = () => {
+  const autoHyperparameters = () => {
     onChange({
-      batchSize: 0,
-      learningRate: 0,
-      epochs: 0,
-      validationSplit: 0
+      batchSize: 32,
+      learningRate: 0.001,
+      epochs: 10,
+      validationSplit: 0.2
     });
   };
 
@@ -43,11 +43,10 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
           </h2>
           <Button
             variant="outline"
-            onClick={resetParameters}
+            onClick={autoHyperparameters}
             className="flex items-center gap-2"
           >
-            <RotateCcw className="h-4 w-4" />
-            Reset All
+            Auto Hyperparameters ✓
           </Button>
         </div>
 
@@ -161,6 +160,12 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
           )}
         </div>
       </div>
+      
+      <footer className="mt-8 text-center text-sm text-gray-600">
+        <p className="flex items-center justify-center gap-1">
+          Made by CodeBolte with <Heart className="h-4 w-4 text-red-500 inline" fill="currentColor" />
+        </p>
+      </footer>
     </div>
   );
 };
