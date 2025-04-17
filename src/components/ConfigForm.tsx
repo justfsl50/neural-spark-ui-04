@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { TrainingConfig } from '@/types';
 import { Sliders, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from "@/hooks/use-toast";
 
 interface ConfigFormProps {
   config: TrainingConfig;
@@ -11,16 +11,28 @@ interface ConfigFormProps {
 }
 
 const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative }) => {
+  const { toast } = useToast();
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     const parsedValue = type === 'number' ? parseFloat(value) : value;
     onChange({ [name]: parsedValue });
   };
 
-  const confirmParameter = (paramName: keyof TrainingConfig) => {
-    // This function is called when the tick button is clicked
-    // You could add validation here if needed
-    console.log(`Parameter ${paramName} confirmed with value:`, config[paramName]);
+  const resetAllParameters = () => {
+    onChange({
+      batchSize: null,
+      learningRate: null,
+      epochs: null,
+      validationSplit: null,
+      prompt: null,
+      seed: null,
+      resolution: null
+    });
+    
+    toast({
+      description: "All parameters have been reset",
+    });
   };
 
   return (
@@ -45,96 +57,60 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Batch Size
             </label>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                name="batchSize"
-                value={config.batchSize || ''}
-                onChange={handleChange}
-                placeholder="Enter batch size"
-                className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-              />
-              <Button
-                onClick={() => confirmParameter('batchSize')}
-                variant="outline"
-                className="border-neural-primary text-neural-primary hover:bg-neural-light"
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-            </div>
+            <input
+              type="number"
+              name="batchSize"
+              value={config.batchSize || ''}
+              onChange={handleChange}
+              placeholder="Enter batch size"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+            />
           </div>
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Learning Rate
             </label>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                name="learningRate"
-                value={config.learningRate || ''}
-                onChange={handleChange}
-                step="0.0001"
-                placeholder="Enter learning rate"
-                className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-              />
-              <Button
-                onClick={() => confirmParameter('learningRate')}
-                variant="outline"
-                className="border-neural-primary text-neural-primary hover:bg-neural-light"
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-            </div>
+            <input
+              type="number"
+              name="learningRate"
+              value={config.learningRate || ''}
+              onChange={handleChange}
+              step="0.0001"
+              placeholder="Enter learning rate"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+            />
           </div>
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Epochs
             </label>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                name="epochs"
-                value={config.epochs || ''}
-                onChange={handleChange}
-                placeholder="Enter epochs"
-                className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-              />
-              <Button
-                onClick={() => confirmParameter('epochs')}
-                variant="outline"
-                className="border-neural-primary text-neural-primary hover:bg-neural-light"
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-            </div>
+            <input
+              type="number"
+              name="epochs"
+              value={config.epochs || ''}
+              onChange={handleChange}
+              placeholder="Enter epochs"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+            />
           </div>
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Validation Split
             </label>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                name="validationSplit"
-                value={config.validationSplit || ''}
-                onChange={handleChange}
-                min="0"
-                max="1"
-                step="0.1"
-                placeholder="Enter validation split"
-                className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-              />
-              <Button
-                onClick={() => confirmParameter('validationSplit')}
-                variant="outline"
-                className="border-neural-primary text-neural-primary hover:bg-neural-light"
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-            </div>
+            <input
+              type="number"
+              name="validationSplit"
+              value={config.validationSplit || ''}
+              onChange={handleChange}
+              min="0"
+              max="1"
+              step="0.1"
+              placeholder="Enter validation split"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+            />
           </div>
           
           {isGenerative && (
@@ -143,76 +119,60 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Prompt
                 </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    name="prompt"
-                    value={config.prompt || ''}
-                    onChange={handleChange}
-                    placeholder="Enter your prompt"
-                    className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-                  />
-                  <Button
-                    onClick={() => confirmParameter('prompt')}
-                    variant="outline"
-                    className="border-neural-primary text-neural-primary hover:bg-neural-light"
-                  >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                </div>
+                <input
+                  type="text"
+                  name="prompt"
+                  value={config.prompt || ''}
+                  onChange={handleChange}
+                  placeholder="Enter your prompt"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+                />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Output Resolution
                 </label>
-                <div className="flex gap-2">
-                  <select
-                    name="resolution"
-                    value={config.resolution || '512x512'}
-                    onChange={(e) => onChange({ resolution: e.target.value })}
-                    className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-                  >
-                    <option value="256x256">256x256</option>
-                    <option value="512x512">512x512</option>
-                    <option value="768x768">768x768</option>
-                    <option value="1024x1024">1024x1024</option>
-                  </select>
-                  <Button
-                    onClick={() => confirmParameter('resolution')}
-                    variant="outline"
-                    className="border-neural-primary text-neural-primary hover:bg-neural-light"
-                  >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                </div>
+                <select
+                  name="resolution"
+                  value={config.resolution || '512x512'}
+                  onChange={(e) => onChange({ resolution: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+                >
+                  <option value="256x256">256x256</option>
+                  <option value="512x512">512x512</option>
+                  <option value="768x768">768x768</option>
+                  <option value="1024x1024">1024x1024</option>
+                </select>
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Random Seed
                 </label>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    name="seed"
-                    value={config.seed || ''}
-                    onChange={handleChange}
-                    min="1"
-                    placeholder="Enter random seed"
-                    className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
-                  />
-                  <Button
-                    onClick={() => confirmParameter('seed')}
-                    variant="outline"
-                    className="border-neural-primary text-neural-primary hover:bg-neural-light"
-                  >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                </div>
+                <input
+                  type="number"
+                  name="seed"
+                  value={config.seed || ''}
+                  onChange={handleChange}
+                  min="1"
+                  placeholder="Enter random seed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-neural-primary focus:border-neural-primary"
+                />
               </div>
             </div>
           )}
+
+          <div className="flex justify-center pt-4">
+            <Button
+              onClick={resetAllParameters}
+              variant="outline"
+              className="border-neural-primary text-neural-primary hover:bg-neural-light"
+            >
+              <Check className="h-4 w-4 mr-2" />
+              Reset All Parameters
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -220,4 +180,3 @@ const ConfigForm: React.FC<ConfigFormProps> = ({ config, onChange, isGenerative 
 };
 
 export default ConfigForm;
-
