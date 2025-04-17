@@ -126,7 +126,7 @@ export const startTraining = async (trainingData: Partial<TrainingState>): Promi
         trainingTime: `${Math.floor(Math.random() * 3) + 1}h ${Math.floor(Math.random() * 60)}m`,
         accuracy: epochStats[epochs - 1].accuracy,
         loss: epochStats[epochs - 1].loss,
-        epochStats,
+        epochStats: epochStats,
         outputSamples: trainingData.selectedModel === 'Stable Diffusion' 
           ? [
               'https://images.unsplash.com/photo-1679678691006-0ad24fecb769',

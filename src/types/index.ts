@@ -12,6 +12,15 @@ export type Dataset = {
   examples: number;
 };
 
+export type GPU = {
+  id: string;
+  name: string;
+  vram: string;
+  cost: number;
+  available: boolean;
+  estimatedTime: string;
+};
+
 export type TrainingConfig = {
   batchSize: number;
   learningRate: number;
@@ -34,5 +43,15 @@ export type TrainingState = {
 export type TrainingResults = {
   modelName: string;
   datasetName: string;
+  trainingTime?: string;
+  accuracy?: number;
+  loss?: number;
+  epochStats?: Array<{
+    epoch: number;
+    loss: number;
+    accuracy: number;
+  }>;
+  outputSamples?: string[];
   modelUrl?: string;
+  rewardEarned?: number;
 };
